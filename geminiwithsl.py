@@ -56,13 +56,15 @@ retriever = load_vector_store()
 st.title("🍽️ Restaurant Review Assistant")
 st.markdown("Ask any question based on real restaurant reviews!")
 
-st.markdown("## 💬 Lịch sử chat")
+st.markdown("## 💬 Chat History")
 for i, (q, a) in enumerate(st.session_state.chat_history):
     with st.expander(f"❓ {q}"):
         st.markdown(f"**🤖** {a}")
 
-question = st.text_input("Enter your question:", placeholder="e.g. What do people think about the food quality?")
+question = st.chat_input("Enter your question:")
+
 if question:
+    st.chat_message("user").markdown(f"**❓ Question:** {question}")
     with st.spinner("Searching and thinking..."):
         retrieved_docs = retriever.invoke(question)
         context = "\n\n".join([doc.page_content for doc in retrieved_docs])
